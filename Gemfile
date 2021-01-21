@@ -51,6 +51,11 @@ group :test do
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
+  gem 'guard'
+  gem 'guard-minitest'
+  gem 'minitest'
+  gem 'minitest-reporters'
+  gem 'rails-controller-testing'
   gem 'rubocop', require: false
   gem 'rubocop-rails'
   gem 'webdrivers'
