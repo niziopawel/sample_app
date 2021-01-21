@@ -1,0 +1,50 @@
+require: rubocop-rails
+
+AllCops:
+  TargetRubyVersion: 2.7.2
+  Exclude:
+    - db/**/*
+    - config/**/*
+    - log/**/*
+    - tmp/**/*
+    - bin/**/*
+    - node_modules/**/*
+    - vendor/**/*
+  NewCops: enable
+
+Layout/LineLength:
+  Max: 140
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
+Layout/MultilineMethodCallIndentation:
+  Exclude:
+    - spec/**/*.rb
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/MutableConstant:
+  Exclude:
+    - app/lib/dfp/client_factory.rb
+
+Style/GuardClause:
+  Enabled: false
+
+Style/SingleLineMethods:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - spec/**/*
