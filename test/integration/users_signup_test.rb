@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
@@ -29,6 +31,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     # verify that the user show template renders following successful signup
     follow_redirect!
     assert_template 'users/show'
+    assert is_logged_in?
     assert_select 'div.alert.alert-success', flash[:success]
   end
 end

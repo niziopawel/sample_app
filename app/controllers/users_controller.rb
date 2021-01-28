@@ -17,6 +17,7 @@ class UsersController < ApplicationController
       # redirect_to @user == @redirect_to user_url(@user)
       # flash[:success] = 'Welcome to the Sample App!'
 
+      log_in @user
       redirect_to @user, flash: { success: 'Welcome to the Sample App' }
     else
       render 'new'
