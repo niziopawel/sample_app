@@ -11,11 +11,11 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }, on: :create
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   def remember
     self.remember_token = User.new_token
-    update(remember_digest: User.digest(remember_token))
+    update_attribute(:remember_digest, User.digest(remember_token))
   end
 
   def authenticated?(remember_token)
@@ -25,7 +25,7 @@ class User < ApplicationRecord
   end
 
   def forget
-    update(remember_digest: nil)
+    update_attribute(:remember_digest, nil)
   end
 
   class << self
