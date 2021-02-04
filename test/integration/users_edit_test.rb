@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'integration/integration_test_helper'
 
-class UsersEditTest < ActionDispatch::IntegrationTest
+class UsersEditTest < IntegrationTestHelper
   def setup
     @user = users(:michael)
   end
 
   test 'unsuccessful edit' do
+    log_in_as(@user)
     get edit_user_path(@user)
 
     assert_template 'users/edit'
@@ -25,6 +27,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test 'successful edit' do
+    log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     name = 'Foo Bar'
@@ -44,5 +47,34 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_equal name, @user.name
     assert_equal email, @user.email
+  end
+
+  test 'successful edit with friendly forwarding' do
+    get edit_user_path(@user)
+    log_in_as(@user)
+    assert_redirected_to edit_user_url(@user)
+    name = 'Foo Bar'
+    email = 'foo@bar.com'
+
+    patch user_path(@user), params: {
+      user: {
+        name: name,
+        email: email,
+        password: '',
+        password_confirmation: ''
+      }
+    }
+
+    assert_not flash.empty?
+    assert_redirected_to @user
+    @user.reload
+    assert_equal name, @user.name
+    assert_equal email, @user.email
+
+    # on susbequen login attempts, the forwarding URL should rever to the default
+    delete logout_path
+    get login_path
+    log_in_as(@user)
+    assert_redirected_to @user
   end
 end

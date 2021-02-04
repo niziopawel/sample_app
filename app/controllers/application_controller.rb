@@ -20,5 +20,9 @@ class ApplicationController < ActionController::Base
     !current_user.nil?
   end
 
+  def current_user?(user)
+    user && user == current_user
+  end
+
   helper_method :logged_in?, :current_user
 end

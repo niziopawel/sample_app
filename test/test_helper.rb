@@ -17,7 +17,7 @@ module ActiveSupport
       !session[:user_id].nil?
     end
 
-    def log_in_as(user)
+    def log_in(user)
       session[:user_id] = user.id
     end
 
