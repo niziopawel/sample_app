@@ -24,5 +24,5 @@ class ApplicationController < ActionController::Base
     user && user == current_user
   end
 
-  helper_method :logged_in?, :current_user
+  helper_method :logged_in?, :current_user, :current_user?
 end

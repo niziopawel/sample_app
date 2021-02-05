@@ -3,11 +3,12 @@ michael:
   email: michael@example.com
   password_digest: <%= User.digest('password') %>
   remember_digest: <%= User.digest(User.new_token) %>
+  admin: true
 archer:
   name: Sterling Archer
   email: duchess@example.org
   password_digest: <%= User.digest('password') %>
-
+  admin: false
 lana:
   name: Lana Kane
   email: hands@example.gov
