@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'integration/integration_test_helper'
 
-class UsersSignupTest < ActionDispatch::IntegrationTest
+class UsersSignupTest < IntegrationTestHelper
+  def setup
+    ActionMailer::Base.deliveries.clear
+  end
   test 'invalid signup information' do
     get signup_path
     assert_no_difference 'User.count' do
@@ -18,7 +22,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert.alert-danger'
   end
 
-  test 'valid signup information' do
+  test 'valid signup information with account activation' do
     get signup_path
     assert_difference 'User.count', 1 do
       post users_path, params: { user: {
@@ -28,10 +32,28 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
         password_confirmation: 'password'
       } }
     end
-    # verify that the user show template renders following successful signup
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    user = assigns(:user)
+    assert_not user.activated?
+
+    # Try to log in before activation
+    log_in_as(user)
+    assert_not logged_in?
+
+    # invalid activation token
+    get edit_account_activation_path('invalid token', email: user.email)
+    assert_not logged_in?
+
+    # valid token, wrong email
+    get edit_account_activation_path(user.activation_token, email: 'wrong@email')
+    assert_not logged_in?
+
+    # valid token
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated?
+
     follow_redirect!
     assert_template 'users/show'
     assert logged_in?
-    assert_select 'div.alert.alert-success', flash[:success]
   end
 end

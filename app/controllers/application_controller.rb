@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
       @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.encrypted[:user_id])
       user = User.find_by(id: user_id)
-      if user&.authenticated?(cookies[:remember_token])
+      if user&.valid_token?(:remember, cookies[:remember_token])
         log_in user
         @current_user = user
       end

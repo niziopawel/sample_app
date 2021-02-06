@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: %i[destroy]
 
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.where(activated: true).paginate(page: params[:page])
   end
 
   def new
@@ -15,20 +15,16 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    redirect_to root_url and return unless @user.activated
   end
 
   def create
     @user = User.new(user_params)
 
     if @user.save
-      # handle successful save.
-      # redirect_to @user == @redirect_to user_url(@user)
-      # flash[:success] = 'Welcome to the Sample App!'
-
-      log_in @user
-      redirect_to @user, flash: { success: 'Welcome to the Sample App' }
+      handle_successful_user_save
     else
-      render 'new'
+      handle_failed_user_save
     end
   end
 
@@ -74,5 +70,15 @@ class UsersController < ApplicationController
 
   def admin_user
     redirect_to(root_url) unless current_user.admin?
+  end
+
+  def handle_successful_user_save
+    @user.send_activation_email
+    flash[:info] = 'Please check your email to activate your account'
+    redirect_to root_url
+  end
+
+  def handle_failed_user_save
+    render 'new'
   end
 end
