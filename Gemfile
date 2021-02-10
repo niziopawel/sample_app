@@ -6,9 +6,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'active_storage_validations'
 gem 'bcrypt'
 gem 'bootstrap-will_paginate'
 gem 'faker'
+gem 'image_processing'
+gem 'mini_magick'
 gem 'rails', '~> 6.1.1'
 gem 'will_paginate'
 # Use sqlite3 as the database for Active Record
@@ -21,7 +24,6 @@ gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
